@@ -2,7 +2,115 @@ package sortingSongCollection.sortingAlgorithms;
 
 import sortingSongCollection.songs.Song;
 
+import java.util.Arrays;
+import java.util.Random;
+
 public class RandomizedQuickSort implements SortingAlgorithm {
+
+    private static int computePivot(Song[] songs, int low, int high){
+        Random rand = new Random();
+        int[] pivots = new int[3];
+        if(high - low <= 1){
+            return rand.nextInt(high - low + 1) + low;
+        }
+        for(int i = 0; i < pivots.length; i++){
+            pivots[i] = rand.nextInt(high - low + 1) + low;
+            while((pivots[0] == pivots[1]) || (i == 2 && (pivots[0] == pivots[2] || pivots[1] == pivots[2]))){
+                pivots[i] = rand.nextInt(high - low + 1) + low;
+
+            }
+        }
+        if((songs[pivots[0]].compareTo(songs[pivots[1]]) < 0 && songs[pivots[0]].compareTo(songs[pivots[2]]) > 0) ||
+                (songs[pivots[0]].compareTo(songs[pivots[1]]) > 0 && songs[pivots[0]].compareTo(songs[pivots[2]]) < 0)){
+            //System.out.println("0 : " + songs[pivots[0]].getTitle() + " " + songs[pivots[1]].getTitle() + " " + songs[pivots[2]].getTitle());
+            //System.out.println("0 : " + pivots[0] + " " + pivots[1] + " " + pivots[2]);
+
+            return pivots[0];
+        }else if((songs[pivots[1]].compareTo(songs[pivots[0]]) < 0 && songs[pivots[1]].compareTo(songs[pivots[2]]) > 0) ||
+                (songs[pivots[1]].compareTo(songs[pivots[0]]) > 0 && songs[pivots[1]].compareTo(songs[pivots[2]]) < 0)){
+            //System.out.println("1 : " + songs[pivots[1]].getTitle() + " " + songs[pivots[0]].getTitle() + " " + songs[pivots[2]].getTitle());
+            //System.out.println("1 : " + pivots[1] + " " + pivots[0] + " " + pivots[2]);
+
+            return pivots[1];
+        }else{
+            //System.out.println("2 : " + songs[pivots[2]].getTitle() + " " + songs[pivots[0]].getTitle() + " " + songs[pivots[1]].getTitle());
+            //System.out.println("2 : " + pivots[2] + " " + pivots[0] + " " + pivots[1]);
+
+            return pivots[2];
+        }
+    }
+
+
+    private static int partition(Song[] songs, int low, int high, boolean isAscending){
+        /*
+        Song pivot;
+        int max = high;
+        Song tmp;
+        int pivotindex = computePivot(songs, low, high);
+
+        tmp = songs[pivotindex];
+        songs[pivotindex] = songs[high];
+        songs[high] = tmp;
+
+        pivot = songs[high];
+        while (low <= high) {
+            while ((low <= high) && (((songs[low].compareTo(pivot) < 0) && isAscending) ||
+                    (songs[low].compareTo(pivot) >= 0) && !isAscending)) {
+                low++;
+            }
+            while ((low <= high) && (((songs[high].compareTo(pivot) >= 0) && isAscending) ||
+                    ((songs[high].compareTo(pivot) < 0)) && !isAscending)){
+                high--;
+            }
+            if (low <= high) {
+                tmp = songs[low];
+                songs[low] = songs[high];
+                songs[high] = tmp;
+                low++;
+                high--;
+            }
+        }
+        tmp = songs[low];
+        songs[low] = songs[max];
+        songs[max] = tmp;
+        return low;
+
+         */
+
+        Song pivot;
+        Song tmp;
+        int max = high;
+        int pivotI = computePivot(songs, low, high);
+
+        tmp = songs[pivotI];
+        songs[pivotI] = songs[high];
+        songs[high] = tmp;
+
+        pivot = songs[high];
+        while (low <= high) {
+            while ((low <= high) && (
+                    ((songs[low].compareTo(pivot) < 0) && isAscending) ||
+                            (songs[low].compareTo(pivot) > 0) && !isAscending))
+                low++;
+            while ((low <= high) && (((songs[high].compareTo(pivot) >= 0) && isAscending) ||
+                    (songs[high].compareTo(pivot) <= 0) && !isAscending))
+                high--;
+            if (low <= high) {
+                tmp = songs[low];
+                songs[low] = songs[high];
+                songs[high] = tmp;
+                low++;
+                high--;
+            }
+        }
+        tmp = songs[low];
+        songs[low] = songs[max];
+        songs[max] = tmp;
+        //System.out.println("AFTER " + low + ": " + arr[low]);
+        return low;
+
+    }
+
 
     // FILL IN CODE: Add helper methods partition and computePivot to this class.
     // In computePivot, the pivot value should be computed as the median of values at three random indices of the subarray from low to high
@@ -34,6 +142,30 @@ public class RandomizedQuickSort implements SortingAlgorithm {
      */
     @Override
     public void sort(Song[] songs, int low, int high, boolean isAscending, StringBuilder sb) {
+        int pivot;
+        if(low < high){
+            pivot = partition(songs, low, high, isAscending);
+            /*
+            for(int i = 0; i < songs.length; i++){
+                if(i == low || i == high){
+                    System.out.print(" || ");
+                }
+                if(i == pivotindex){
+                    System.out.print("  " + songs[i].getTitle() + "  ");
+                }else {
+                    System.out.print(songs[i].getTitle());
+                }
+            }
+            System.out.println("");
+            System.out.println("Used pivot " + songs[pivotindex].getTitle());
+            */
+            for(int i = 0; i < songs.length; i++){
+                System.out.print(songs[i].getTitle());
+            }
+            System.out.println("");
+            sort(songs, low, pivot - 1, isAscending, sb);
+            sort(songs, pivot + 1, high, isAscending, sb);
+        }
         // FILL IN CODE
 
     }
