@@ -1,5 +1,7 @@
 package sortingABC;
 
+import org.w3c.dom.ls.LSOutput;
+
 public class ABCPartition {
 
     /**
@@ -23,11 +25,66 @@ public class ABCPartition {
      * @return winner
      */
     public String sortAndFindWinner (String[] votes) {
+        int i = 0;
+        int j = votes.length-1;
+        int abc = 65;
+        String tmp;
+
+        for(int k = 0; k < votes.length; k++){
+            System.out.print(votes[k]);
+        }
+        System.out.println("");
+        while(abc < 67){
+            while(i <= j && i < votes.length) {
+                if (votes[i].equals(String.valueOf((char)abc))) {
+                    i++;
+                } else if (!votes[i].equals(String.valueOf((char)abc)) && !votes[j].equals(String.valueOf((char)abc))){
+                    j--;
+                } else if (votes[j].equals(String.valueOf((char)abc))){
+                    tmp = votes[i];
+                    votes[i] = votes[j];
+                    votes[j] = tmp;
+                    i++;
+                    j--;
+                }
+            }
+            j = votes.length-1;
+            abc++;
+            for(int k = 0; k < votes.length; k++){
+                System.out.print(votes[k]);
+            }
+            System.out.println("");
+        }
+        System.out.println(" ");
+        for(int k = 0; k < votes.length; k++){
+            System.out.print(votes[k] + ", ");
+        }
+
+        int countA = 0;
+        int countB = 0;
+        int countC = 0;
+        for(int k = 0; k < votes.length; k++){
+            if(votes[k].equals("A")){
+                countA++;
+            } else if (votes[k].equals("B")) {
+                countB++;
+            } else{
+                countC++;
+            }
+        }
+
         // FILL IN CODE
         // Hint: first partition the array into As and non-As
         // Then run another pass for the subarray of non-As, partitioning it into Bs and Cs.
         // Once the array is sorted, figure out how to find the winner
-
-        return null; // change to return the winner
+        System.out.println();
+        if(countA >= countB && countA >= countC){
+            return("A");
+        }else if (countB >= countA && countB >= countC){
+            return("B");
+        }else{
+            return("C");
+        }
+         // change to return the winner
     }
 }
