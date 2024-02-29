@@ -25,22 +25,23 @@ public class ABCPartition {
      * @return winner
      */
     public String sortAndFindWinner (String[] votes) {
-        int i = 0;
-        int j = votes.length-1;
-        int abc = 65;
-        String tmp;
-
-        for(int k = 0; k < votes.length; k++){
-            System.out.print(votes[k]);
+        if(votes == null){
+            return null;
         }
-        System.out.println("");
+
+        int i = 0;
+        int j = votes.length - 1;
+        int abc = 65; //ASCII value to iterate through ABC
+        String tmp;
+        int[] freq = new int[3]; //frequency of A, B, and C
+
         while(abc < 67){
             while(i <= j && i < votes.length) {
                 if (votes[i].equals(String.valueOf((char)abc))) {
                     i++;
                 } else if (!votes[i].equals(String.valueOf((char)abc)) && !votes[j].equals(String.valueOf((char)abc))){
                     j--;
-                } else if (votes[j].equals(String.valueOf((char)abc))){
+                } else if (votes[j].equals(String.valueOf((char)abc))){ //if votes[i] is not x and votes[j] is x, swap
                     tmp = votes[i];
                     votes[i] = votes[j];
                     votes[j] = tmp;
@@ -49,42 +50,22 @@ public class ABCPartition {
                 }
             }
             j = votes.length-1;
+            if(abc-65 == 0){ //Counts the frequency of A
+                freq[0] = i;
+            }else{ //Counts the frequency of B and C
+                freq[1] = i - freq[0];
+                freq[2] = votes.length - (freq[0] + freq[1]) ;
+            }
             abc++;
-            for(int k = 0; k < votes.length; k++){
-                System.out.print(votes[k]);
-            }
-            System.out.println("");
-        }
-        System.out.println(" ");
-        for(int k = 0; k < votes.length; k++){
-            System.out.print(votes[k] + ", ");
         }
 
-        int countA = 0;
-        int countB = 0;
-        int countC = 0;
-        for(int k = 0; k < votes.length; k++){
-            if(votes[k].equals("A")){
-                countA++;
-            } else if (votes[k].equals("B")) {
-                countB++;
-            } else{
-                countC++;
-            }
-        }
-
-        // FILL IN CODE
-        // Hint: first partition the array into As and non-As
-        // Then run another pass for the subarray of non-As, partitioning it into Bs and Cs.
-        // Once the array is sorted, figure out how to find the winner
-        System.out.println();
-        if(countA >= countB && countA >= countC){
+        //Decides the winner based on the frequency previously recorded
+        if(freq[0] >= freq[1] && freq[0] >= freq[2]){
             return("A");
-        }else if (countB >= countA && countB >= countC){
+        }else if (freq[1] >= freq[0] && freq[1] >= freq[2]){
             return("B");
         }else{
             return("C");
         }
-         // change to return the winner
     }
 }
