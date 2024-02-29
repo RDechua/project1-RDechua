@@ -30,72 +30,32 @@ public class InsertionSort implements SortingAlgorithm {
      */
     @Override
     public void sort(Song[] songs, int low, int high, boolean isAscending, StringBuilder sb) {
-        int mark = low;
-        int a = low;
-        int b = high;
-        /*
-        while(low < high){
-            while(songs[low].getTitle().charAt(0) > songs[low+1].getTitle().charAt(0)){
-                Song tmp = songs[low+1];
-                songs[low+1] = songs[low];
-                while(low-1 >= a  && tmp.getTitle().charAt(0) < songs[low-1].getTitle().charAt(0)){
-                    songs[low] = songs[low-1];
-                    low--;
-                }
-                songs[low] = tmp;
-            }
-            low++;
-        }
+        if(songs.length == 1){
+            sb.append(songs[0].getTitle().charAt(0));
+        }else if(songs.length == 0){
+            System.out.println("Empty song list");
+        }else{
+            int MARK = low; //Fixed constant to ensure that values outside the range low and high does not get modified
+            int a;
+            low++; //Starts in the index after low
 
-        while (low < high) {
-                if (songs[low].getTitle().charAt(0) > songs[low + 1].getTitle().charAt(0)) {
-                    Song tmp = songs[low + 1];
-                    songs[low + 1] = songs[low];
-                    a = low;
-                    while ((a - 1 >= mark) && (tmp.getTitle().charAt(0) < songs[a - 1].getTitle().charAt(0))) {
-                        songs[a] = songs[a - 1];
-                        a--;
-                    }
-                    songs[a] = tmp;
-                    low = a;
-                }
-                low++;
-                for (int i = mark; i < b; i++) {
-                    System.out.print(songs[i].getTitle());
-                }
-                System.out.println("");
-            }
-
-        */
-
-
-        while (low < high) {
-            if ((songs[low].compareTo(songs[low + 1]) > 0 && isAscending) ||
-                    (songs[low].compareTo(songs[low + 1]) < 0 && !isAscending)) {
-                Song tmp = songs[low + 1];
-                songs[low + 1] = songs[low];
-                a = low;
-                while ((a - 1 >= mark) && ((tmp.compareTo(songs[a - 1]) < 0 && isAscending) ||
-                        (tmp.getTitle().charAt(0) > songs[a - 1].getTitle().charAt(0) && !isAscending))) {
+            while(low <= high){
+                Song tmp = songs[low];
+                a = low; //Change variable to decrement
+                while((a - 1 >= MARK) && ((tmp.compareTo(songs[a - 1]) < 0 && isAscending) ||
+                        (tmp.compareTo(songs[a - 1]) > 0 && !isAscending))){
                     songs[a] = songs[a - 1];
                     a--;
                 }
                 songs[a] = tmp;
-                low = a;
+                low++;
+
+                //Appends to string builder after every pass
+                for(int i = 0; i < songs.length; i++){
+                    sb.append(songs[i].getTitle().charAt(0));
+                }
+                sb.append("\n");
             }
-            low++;
-            for (int i = 0; i < songs.length; i++) {
-                System.out.print(songs[i].getTitle());
-            }
-            System.out.println("");
         }
-        System.out.println("END 1");
-
-
-
-        // FILL IN CODE
-
-
     }
-
 }
