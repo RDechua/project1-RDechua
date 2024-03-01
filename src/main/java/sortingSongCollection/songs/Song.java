@@ -35,9 +35,11 @@ public class Song implements Comparable<Song> {
      */
     @Override
     public int compareTo(Song o) {
-        // FILL IN CODE: compare songs by title
-
-        return 1; // change
+        if(this.title.compareTo(o.title) != 0) { //If the title of the songs are not the same
+            return this.title.compareTo(o.title);
+        }else{
+            return this.artist.compareTo(o.artist); // If the title are the same, compare by artist's name
+        }
     }
 }
 

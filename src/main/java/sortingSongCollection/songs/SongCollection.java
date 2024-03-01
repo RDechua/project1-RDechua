@@ -1,6 +1,8 @@
 package sortingSongCollection.songs;
 
 import sortingSongCollection.sortingAlgorithms.SortingAlgorithm;
+import java.io.FileWriter;
+import java.io.IOException;
 
 /** A class that stores an array of songs and has methods to add songs, sort songs with the
  * given sorting algorithm, etc.
@@ -51,11 +53,19 @@ public class SongCollection {
      * @param filename write intermediate results of the sorting algorithm to the given file (see pdf for description)
      */
     public void sortSongs(int low, int high, boolean isAscending, String filename) {
-        // sorts songs from low to high
-        // sorts in ascending order if isAscending is true (otherwise in descending order)
+
         StringBuilder sb = new StringBuilder();
-        // FILL IN CODE: Call the sort method of the SortingAlgorithm set for this collection
-        // Write the string from StringBuilder sb to the file with the given filename
+
+        if(sortingAlgorithm != null){
+            sortingAlgorithm.sort(songs, low, high, isAscending, sb);
+            try (FileWriter file = new FileWriter(filename)){
+                file.write(sb.toString());
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+        }else{
+            System.out.println("sortingAlgorithm not set");
+        }
 
     }
 
